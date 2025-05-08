@@ -48,8 +48,9 @@ let link = [];
 let banHosts = [atob('c3BlZWQuY2xvdWRmbGFyZS5jb20=')];
 let SCV = 'true';
 let allowInsecure = '&allowInsecure=1';
+
+addEventListener('fetch', event => {event.respondWith(handleRequest(event.request));});
 export default {
-	addEventListener('fetch', event => {event.respondWith(handleRequest(event.request));});
 	async fetch(request, env, ctx) {
 		try {
 			const UA = request.headers.get('User-Agent') || 'null';
