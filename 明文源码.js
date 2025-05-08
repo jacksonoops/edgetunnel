@@ -49,6 +49,7 @@ let banHosts = [atob('c3BlZWQuY2xvdWRmbGFyZS5jb20=')];
 let SCV = 'true';
 let allowInsecure = '&allowInsecure=1';
 export default {
+	addEventListener('fetch', event => {event.respondWith(handleRequest(event.request));});
 	async fetch(request, env, ctx) {
 		try {
 			const UA = request.headers.get('User-Agent') || 'null';
@@ -256,6 +257,21 @@ export default {
 		}
 	},
 };
+
+async function handleRequest(request) {
+  const clientIP = request.headers.get('CF-Connecting-IP');
+  const requestURL = new URL(request.url);
+  const requestPath = requestURL.pathname;
+  const requestMethod = request.method;
+  const targetHost = request.headers.get('Host'); // 获取 Host 头，即目标网站
+
+  console.log(`VPN 请求信息：IP 地址 - ${clientIP}, 请求方法 - ${requestMethod}, 访问路径 - ${requestPath}, 目标网站 - ${targetHost}`);
+
+  // 这里你可以添加将信息发送到其他地方的代码，例如日志服务
+
+  // 继续处理原始请求，将其转发到目标网站
+  return fetch(request);
+}
 
 async function 维列斯OverWSHandler(request) {
 
